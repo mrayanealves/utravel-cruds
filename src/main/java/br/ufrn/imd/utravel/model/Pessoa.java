@@ -1,6 +1,6 @@
 package br.ufrn.imd.utravel.model;
 
-public class Pessoa extends EntidadeAbstrada {
+public class Pessoa extends AbstractModel {
     private String cpf;
     private String nome;
 

@@ -1,6 +1,6 @@
 package br.ufrn.imd.utravel.model;
 
-public class Usuario extends EntidadeAbstrada {
+public class Usuario extends AbstractModel {
     private String email;
     private String senha;
     private String telefone;

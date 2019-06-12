@@ -3,7 +3,7 @@ package br.ufrn.imd.utravel.model;
 import java.io.Serializable;
 import java.util.Objects;
 
-public class EntidadeAbstrada implements Serializable  {
+public class AbstractModel implements Serializable  {
     private Long id;
 
     public Long getId() {
@@ -18,7 +18,7 @@ public class EntidadeAbstrada implements Serializable  {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        EntidadeAbstrada that = (EntidadeAbstrada) o;
+        AbstractModel that = (AbstractModel) o;
         return Objects.equals(id, that.id);
     }
 
