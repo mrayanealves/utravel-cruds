@@ -4,10 +4,11 @@ public class Usuario extends EntidadeAbstrada {
     private String email;
     private String senha;
     private String telefone;
+    private Pessoa pessoa;
 
     public Usuario() {}
 
-    public Usuario(Long id, String email, String senha, String telefone) {
+    public Usuario(Long id, String email, String senha, String telefone, Pessoa pessoa) {
         setId(id);
         this.email = email;
         this.senha = senha;
@@ -36,5 +37,13 @@ public class Usuario extends EntidadeAbstrada {
 
     public void setTelefone(String telefone) {
         this.telefone = telefone;
+    }
+
+    public Pessoa getPessoa() {
+        return pessoa;
+    }
+
+    public void setPessoa(Pessoa pessoa) {
+        this.pessoa = pessoa;
     }
 }

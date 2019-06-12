@@ -2,9 +2,6 @@ HELP.md
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
-### SPRING ###
-application.properties
-
 ### STS ###
 .apt_generated
 .classpath

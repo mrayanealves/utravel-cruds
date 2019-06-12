@@ -4,6 +4,14 @@ public class Pessoa extends EntidadeAbstrada {
     private String cpf;
     private String nome;
 
+    public Pessoa() {}
+
+    public Pessoa(Long id, String cpf, String nome) {
+        setId(id);
+        this.cpf = cpf;
+        this.nome = nome;
+    }
+
     public String getCpf() {
         return cpf;
     }
