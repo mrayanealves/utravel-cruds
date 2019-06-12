@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 
 @Repository
 public class PessoaRepository {
@@ -22,12 +23,12 @@ public class PessoaRepository {
         String sql = "INSERT INTO utravel.pessoa (cpf, nome) VALUES (?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setString(1, pessoa.getCpf());
             ps.setString(2, pessoa.getNome());
             return ps;
         }, keyHolder);
-        pessoa.setId((Long) keyHolder.getKey());
+        pessoa.setId(keyHolder.getKey().longValue());
         return pessoa;
     }
 }

@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
+import java.sql.Statement;
 import java.util.List;
 
 @Repository
@@ -64,14 +65,14 @@ public class UsuarioRepository {
 
         KeyHolder keyHolder = new GeneratedKeyHolder();
         jdbcTemplate.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql);
+            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
             ps.setLong(1, usuario.getPessoa().getId());
             ps.setString(2, usuario.getTelefone());
             ps.setString(3, usuario.getEmail());
             ps.setString(4, usuario.getSenha());
             return ps;
         }, keyHolder);
-        usuario.setId((Long) keyHolder.getKey());
+        usuario.setId(keyHolder.getKey().longValue());
         return usuario;
     }
 
