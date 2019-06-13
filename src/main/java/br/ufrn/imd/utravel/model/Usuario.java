@@ -13,6 +13,7 @@ public class Usuario extends EntidadeAbstrada {
         this.email = email;
         this.senha = senha;
         this.telefone = telefone;
+        this.pessoa = pessoa;
     }
 
     public String getEmail() {

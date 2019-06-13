@@ -31,4 +31,9 @@ public class PessoaRepository {
         pessoa.setId(keyHolder.getKey().longValue());
         return pessoa;
     }
+
+    public void atualizar(Pessoa pessoa) {
+        String sql = "UPDATE utravel.pessoa SET cpf = ?, nome = ? WHERE id = ?";
+        jdbcTemplate.update(sql, pessoa.getCpf(), pessoa.getNome(), pessoa.getId());
+    }
 }

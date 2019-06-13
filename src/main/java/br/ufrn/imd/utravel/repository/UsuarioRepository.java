@@ -76,7 +76,9 @@ public class UsuarioRepository {
         return usuario;
     }
 
+    @Transactional(rollbackFor = Exception.class)
     public void atualizar(Usuario usuario) {
+        pessoaRepository.atualizar(usuario.getPessoa());
         jdbcTemplate.update("UPDATE utravel.usuario SET telefone = ?, email = ?, senha = ? WHERE id = ?", usuario.getTelefone(), usuario.getEmail(), usuario.getSenha(), usuario.getId());
     }
 
