@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.Optional;
 
 public interface GenericRepository <T extends AbstractModel> {
-    List<T> buscarTodos();
+    List<T> findAll();
 
-    Optional<T> buscarPorId(Long id);
+    Optional<T> findById(Long id);
 
-    T salvar(T modelo);
+    T save(T modelo);
 
-    T atualizar(T modelo);
+    T update(T modelo);
 
-    ResponseEntity<T> deletar(Long id);
+    String delete(Long id);
 }
