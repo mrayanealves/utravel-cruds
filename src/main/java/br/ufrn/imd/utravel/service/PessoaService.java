@@ -3,6 +3,7 @@ package br.ufrn.imd.utravel.service;
 import java.util.List;
 import java.util.Optional;
 
+import br.ufrn.imd.utravel.exception.EntidadeNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -31,5 +32,32 @@ public class PessoaService {
 		}
 
 		return ResponseEntity.ok(pessoa.get());
+	}
+
+	public Pessoa save(Pessoa pessoa){
+		return pessoaRepository.save(pessoa);
+	}
+
+	public Pessoa update(Integer id, Pessoa pessoa){
+		Optional<Pessoa> pessoaFind = pessoaRepository.findById(id);
+		if (!pessoaFind.isPresent()){
+			throw new EntidadeNaoEncontradaException("Não foi possível encontrar uma pessoa com este id.");
+		}
+
+		pessoa.setId(id);
+
+		if (!pessoaFind.get().getCpf().equals(pessoa.getCpf())){
+			if ((pessoa.getCpf() == null)){
+				pessoa.setCpf(pessoaFind.get().getCpf());
+			}
+		}
+
+		if (!pessoaFind.get().getNome().equals(pessoa.getNome())){
+			if ((pessoa.getNome() == null)){
+				pessoa.setNome(pessoaFind.get().getNome());
+			}
+		}
+
+		return pessoaRepository.update(pessoa);
 	}
 }

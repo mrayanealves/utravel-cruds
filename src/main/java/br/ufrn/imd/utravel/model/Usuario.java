@@ -8,7 +8,7 @@ public class Usuario extends AbstractModel {
 
     public Usuario() {}
 
-    public Usuario(Long id, String email, String senha, String telefone, Pessoa pessoa) {
+    public Usuario(Integer id, String email, String senha, String telefone, Pessoa pessoa) {
         setId(id);
         this.email = email;
         this.senha = senha;

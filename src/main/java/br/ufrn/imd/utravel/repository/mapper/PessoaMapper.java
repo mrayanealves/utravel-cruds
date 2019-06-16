@@ -10,7 +10,7 @@ public class PessoaMapper implements RowMapper<Pessoa> {
     @Override
     public Pessoa mapRow(ResultSet resultSet, int i) throws SQLException {
         Pessoa pessoa = new Pessoa();
-        pessoa.setId(resultSet.getLong("id"));
+        pessoa.setId(resultSet.getInt("id"));
         pessoa.setCpf(resultSet.getString("cpf"));
         pessoa.setNome(resultSet.getString("nome"));
 

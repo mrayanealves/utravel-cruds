@@ -7,10 +7,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.ufrn.imd.utravel.model.Pessoa;
 import br.ufrn.imd.utravel.service.PessoaService;
@@ -30,5 +27,15 @@ public class PessoaController {
 	@GetMapping("/{id}")
 	public ResponseEntity<Pessoa> findById(@PathVariable Integer id){
 		return pessoaService.findById(id);
+	}
+
+	@PostMapping
+	public ResponseEntity<Pessoa> save(@RequestBody Pessoa pessoa){
+		return ResponseEntity.ok(pessoaService.save(pessoa));
+	}
+
+	@PutMapping("/{id}")
+	public ResponseEntity<Pessoa> update(@PathVariable Integer id, @RequestBody Pessoa pessoa){
+		return ResponseEntity.ok(pessoaService.update(id, pessoa));
 	}
 }

@@ -6,7 +6,7 @@ public class Pessoa extends AbstractModel {
 
     public Pessoa() {}
 
-    public Pessoa(Long id, String cpf, String nome) {
+    public Pessoa(Integer id, String cpf, String nome) {
         setId(id);
         this.cpf = cpf;
         this.nome = nome;

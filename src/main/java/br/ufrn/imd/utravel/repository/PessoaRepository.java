@@ -4,12 +4,15 @@ import br.ufrn.imd.utravel.model.Pessoa;
 import br.ufrn.imd.utravel.repository.mapper.PessoaMapper;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.PreparedStatementCreator;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
@@ -46,21 +49,29 @@ public class PessoaRepository implements GenericRepository<Pessoa>{
 
     @Override
     public Pessoa save (Pessoa pessoa) {
-        String sql = "INSERT INTO utravel.pessoa (cpf, nome) VALUES (?, ?)";
         KeyHolder keyHolder = new GeneratedKeyHolder();
+        String SQL = "INSERT INTO utravel.pessoa (cpf, nome) VALUES (?, ?)";
+
         jdbcTemplateObject.update(connection -> {
-            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-            ps.setString(1, pessoa.getCpf());
-            ps.setString(2, pessoa.getNome());
-            return ps;
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setString(1, pessoa.getCpf());
+            preparedStatement.setString(2, pessoa.getNome());
+            return preparedStatement;
         }, keyHolder);
-        pessoa.setId(keyHolder.getKey().longValue());
+
+        if (keyHolder.getKey() != null){
+            pessoa.setId(keyHolder.getKey().intValue());
+        }
+
         return pessoa;
     }
 
     @Override
-    public Pessoa update(Pessoa modelo) {
-        return null;
+    public Pessoa update(Pessoa pessoa) {
+        String SQL = "UPDATE utravel.pessoa SET cpf = ?, nome = ? WHERE id = ?";
+        jdbcTemplateObject.update(SQL, pessoa.getCpf(), pessoa.getNome(), pessoa.getId());
+
+        return pessoa;
     }
 
     @Override
