@@ -14,6 +14,7 @@ public class RestauranteMapper implements RowMapper<Restaurante> {
         restaurante.setId(resultSet.getInt("r.id"));
         restaurante.setTipo(resultSet.getString("r.tipo"));
         restaurante.setAvaliacao(resultSet.getString("r.avaliacao"));
+        restaurante.setEndereco(resultSet.getString("r.endereco"));
         restaurante.setEmpresa(new EmpresaMapper().mapRow(resultSet, i));
         return restaurante;
     }

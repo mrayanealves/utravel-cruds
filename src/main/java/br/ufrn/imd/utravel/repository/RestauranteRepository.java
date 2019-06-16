@@ -61,11 +61,12 @@ public class RestauranteRepository implements GenericRepository<Restaurante> {
 
     @Override
     public Restaurante update(Restaurante restaurante) {
-        String SQL = "UPDATE utravel.restaurante SET empresa_id = ?, tipo = ?, avaliacao = ? WHERE id = ?";
+        String SQL = "UPDATE utravel.restaurante SET empresa_id = ?, tipo = ?, avaliacao = ?, endereco = ? WHERE id = ?";
         jdbcTemplate.update(SQL,
                 restaurante.getEmpresa().getId(),
                 restaurante.getTipo(),
                 restaurante.getAvaliacao(),
+                restaurante.getEndereco(),
                 restaurante.getId());
         return restaurante;
     }
