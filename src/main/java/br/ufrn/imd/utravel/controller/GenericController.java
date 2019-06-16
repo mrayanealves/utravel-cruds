@@ -1,7 +1,6 @@
 package br.ufrn.imd.utravel.controller;
 
 import br.ufrn.imd.utravel.model.AbstractModel;
-import br.ufrn.imd.utravel.model.Pessoa;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
