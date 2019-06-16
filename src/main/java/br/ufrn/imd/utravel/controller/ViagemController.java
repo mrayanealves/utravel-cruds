@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("viagens")
@@ -26,7 +27,13 @@ public class ViagemController implements GenericController<Viagem> {
 
     @Override
     public ResponseEntity<Viagem> findById(Integer id) {
-        return viagemService.findById(id);
+        Optional<Viagem> viagem = viagemService.findById(id);
+
+        if (!viagem.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(viagem.get());
     }
 
     @Override
@@ -36,7 +43,7 @@ public class ViagemController implements GenericController<Viagem> {
 
     @Override
     public ResponseEntity<Viagem> update(Integer id, Viagem viagem) {
-        return ResponseEntity.ok(viagemService.save(viagem));
+        return ResponseEntity.ok(viagemService.update(id, viagem));
     }
 
     @Override

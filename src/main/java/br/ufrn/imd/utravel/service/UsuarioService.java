@@ -29,14 +29,8 @@ public class UsuarioService implements GenericService<Usuario>{
     }
 
     @Override
-    public ResponseEntity<Usuario> findById(Integer id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-
-        if (!usuario.isPresent()){
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(usuario.get());
+    public Optional<Usuario> findById(Integer id) {
+        return usuarioRepository.findById(id);
     }
 
     @Override
