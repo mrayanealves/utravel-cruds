@@ -79,4 +79,11 @@ public class OrcamentoRepository implements GenericRepository<Orcamento> {
 
         return "Sucesso";
     }
+
+    public List<Orcamento> findByViagemId(Integer viagemId){
+        String SQL = "SELECT * FROM utravel.orcamento o JOIN utravel.viagem v ON o.viagem_id = v.id WHERE v.id = ?";
+        List<Orcamento> orcamentos = jdbcTemplateObject.query(SQL, new Object[]{ viagemId }, new OrcamentoMapper());
+
+        return orcamentos;
+    }
 }

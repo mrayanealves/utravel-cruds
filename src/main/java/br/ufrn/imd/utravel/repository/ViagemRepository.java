@@ -20,15 +20,24 @@ public class ViagemRepository implements GenericRepository<Viagem> {
     @Autowired
     private final JdbcTemplate jdbcTemplateObject;
 
+    private final OrcamentoRepository orcamentoRepository;
+
     @Autowired
-    public ViagemRepository(DataSource dataSource) {
+    public ViagemRepository(DataSource dataSource, OrcamentoRepository orcamentoRepository) {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+        this.orcamentoRepository = orcamentoRepository;
     }
 
     @Override
     public List<Viagem> findAll() {
         String sql = "SELECT * FROM utravel.viagem v";
-        return jdbcTemplateObject.query(sql, new ViagemMapper());
+        List<Viagem> viagens =  jdbcTemplateObject.query(sql, new ViagemMapper());
+
+        for (int i = 0; i < viagens.size(); i++){
+            viagens.get(i).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
+        }
+
+        return viagens;
     }
 
     @Override
@@ -39,6 +48,7 @@ public class ViagemRepository implements GenericRepository<Viagem> {
             return Optional.empty();
         }
 
+        viagens.get(0).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
         return Optional.of(viagens.get(0));
     }
 

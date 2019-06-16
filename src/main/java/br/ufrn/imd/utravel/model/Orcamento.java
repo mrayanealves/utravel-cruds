@@ -1,5 +1,7 @@
 package br.ufrn.imd.utravel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Orcamento extends AbstractModel {
     private String tipo;
     private Float valorEstimado;
@@ -30,6 +32,7 @@ public class Orcamento extends AbstractModel {
         this.valorEstimado = valorEstimado;
     }
 
+    @JsonIgnore
     public Viagem getViagem() {
         return viagem;
     }
