@@ -1,6 +1,6 @@
 package br.ufrn.imd.utravel.model;
 
-public class Usuario extends EntidadeAbstrada {
+public class Usuario extends AbstractModel {
     private String email;
     private String senha;
     private String telefone;
@@ -8,7 +8,7 @@ public class Usuario extends EntidadeAbstrada {
 
     public Usuario() {}
 
-    public Usuario(Long id, String email, String senha, String telefone, Pessoa pessoa) {
+    public Usuario(Integer id, String email, String senha, String telefone, Pessoa pessoa) {
         setId(id);
         this.email = email;
         this.senha = senha;
