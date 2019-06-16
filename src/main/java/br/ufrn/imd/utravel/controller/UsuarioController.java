@@ -13,7 +13,6 @@ import java.util.List;
 @RequestMapping("usuarios")
 @Api(value = "Gerenciar usuários")
 public class UsuarioController implements GenericController<Usuario> {
-    @Autowired
     private final UsuarioService usuarioService;
 
     @Autowired

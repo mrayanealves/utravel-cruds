@@ -8,6 +8,7 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
+import javax.sql.DataSource;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -16,23 +17,24 @@ import java.util.Optional;
 
 @Repository
 public class ViagemRepository implements GenericRepository<Viagem> {
-    private final JdbcTemplate jdbcTemplate;
+    @Autowired
+    private final JdbcTemplate jdbcTemplateObject;
 
     @Autowired
-    public ViagemRepository(JdbcTemplate jdbcTemplate) {
-        this.jdbcTemplate = jdbcTemplate;
+    public ViagemRepository(DataSource dataSource) {
+        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }
 
     @Override
     public List<Viagem> findAll() {
         String sql = "SELECT * FROM utravel.viagem v";
-        return jdbcTemplate.query(sql, new ViagemMapper());
+        return jdbcTemplateObject.query(sql, new ViagemMapper());
     }
 
     @Override
     public Optional<Viagem> findById(Integer id) {
         String sql = "SELECT * FROM utravel.viagem v WHERE v.id = ?";
-        List<Viagem> viagens = jdbcTemplate.query(sql, new Object[]{id}, new ViagemMapper());
+        List<Viagem> viagens = jdbcTemplateObject.query(sql, new Object[]{id}, new ViagemMapper());
         if(viagens.isEmpty()) {
             return Optional.empty();
         }
@@ -45,7 +47,7 @@ public class ViagemRepository implements GenericRepository<Viagem> {
         KeyHolder keyHolder = new GeneratedKeyHolder();
         String SQL = "INSERT INTO utravel.viagem (data_inicio, data_fim) VALUES (?, ?)";
 
-        jdbcTemplate.update(connection -> {
+        jdbcTemplateObject.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setDate(1, Date.valueOf(viagem.getDataInicio()));
             preparedStatement.setDate(2, Date.valueOf(viagem.getDataFim()));
@@ -62,14 +64,14 @@ public class ViagemRepository implements GenericRepository<Viagem> {
     @Override
     public Viagem update(Viagem viagem) {
         String SQL = "UPDATE utravel.viagem SET data_inicio= ?, data_fim = ? WHERE id = ?";
-        jdbcTemplate.update(SQL, viagem.getDataInicio(), viagem.getDataFim(), viagem.getId());
+        jdbcTemplateObject.update(SQL, viagem.getDataInicio(), viagem.getDataFim(), viagem.getId());
         return viagem;
     }
 
     @Override
     public String delete(Integer id) {
         String SQL = "DELETE FROM utravel.viagem WHERE id = ?";
-        jdbcTemplate.update(SQL, id);
+        jdbcTemplateObject.update(SQL, id);
         return "Sucesso";
     }
 }

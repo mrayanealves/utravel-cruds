@@ -13,12 +13,11 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService implements GenericService<Usuario>{
-    @Autowired
     private final UsuarioRepository usuarioRepository;
 
-    @Autowired
     private final PessoaService pessoaService;
 
+    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository, PessoaService pessoaService) {
         this.usuarioRepository = usuarioRepository;
         this.pessoaService = pessoaService;

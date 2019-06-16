@@ -13,7 +13,6 @@ import br.ufrn.imd.utravel.repository.PessoaRepository;
 
 @Service
 public class PessoaService implements GenericService<Pessoa>{
-	@Autowired
 	private final PessoaRepository pessoaRepository;
 	
 	@Autowired
