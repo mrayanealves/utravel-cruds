@@ -6,6 +6,15 @@ public class Viagem extends AbstractModel {
     private LocalDate dataInicio;
     private LocalDate dataFim;
 
+    public Viagem() {
+    }
+
+    public Viagem(Integer id, LocalDate dataInicio, LocalDate dataFim) {
+        super.setId(id);
+        this.dataInicio = dataInicio;
+        this.dataFim = dataFim;
+    }
+
     public LocalDate getDataInicio() {
         return dataInicio;
     }
