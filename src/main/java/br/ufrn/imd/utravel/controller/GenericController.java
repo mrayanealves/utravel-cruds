@@ -15,10 +15,10 @@ public interface GenericController <T extends AbstractModel> {
     ResponseEntity<T> findById(@PathVariable Integer id);
 
     @PostMapping
-    ResponseEntity<T> save(@RequestBody Pessoa pessoa);
+    ResponseEntity<T> save(@RequestBody T modelo);
 
     @PutMapping("/{id}")
-    ResponseEntity<T> update(@PathVariable Integer id, @RequestBody Pessoa pessoa);
+    ResponseEntity<T> update(@PathVariable Integer id, @RequestBody T modelo);
 
     @DeleteMapping("/{id}")
     ResponseEntity<String> delete(@PathVariable Integer id);

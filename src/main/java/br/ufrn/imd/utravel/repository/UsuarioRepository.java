@@ -1,92 +1,89 @@
 package br.ufrn.imd.utravel.repository;
 
-import br.ufrn.imd.utravel.model.Pessoa;
 import br.ufrn.imd.utravel.model.Usuario;
-import org.springframework.http.ResponseEntity;
+import br.ufrn.imd.utravel.repository.mapper.UsuarioMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.util.List;
 import java.util.Optional;
 
 @Repository
-public class UsuarioRepository {
-    private final JdbcTemplate jdbcTemplate;
+public class UsuarioRepository implements GenericRepository<Usuario>{
+    @Autowired
+    private final JdbcTemplate jdbcTemplateObject;
+
+    @Autowired
     private final PessoaRepository pessoaRepository;
 
-    public UsuarioRepository(JdbcTemplate jdbcTemplate, PessoaRepository pessoaRepository) {
-        this.jdbcTemplate = jdbcTemplate;
+    public UsuarioRepository(DataSource dataSource, PessoaRepository pessoaRepository) {
+        this.jdbcTemplateObject = new JdbcTemplate(dataSource);
         this.pessoaRepository = pessoaRepository;
     }
 
-//    @Override
-//    public List<Usuario> buscarTodos() {
-//        String sql = "SELECT * FROM utravel.usuario u JOIN utravel.pessoa p ON u.pessoa_id = p.id";
-//        return jdbcTemplate.query(sql,
-//                (rs, rowNum) -> new Usuario(
-//                        rs.getLong("u.id"),
-//                        rs.getString("u.email"),
-//                        rs.getString("u.senha"),
-//                        rs.getString("u.telefone"),
-//                        new Pessoa(
-//                                rs.getLong("p.id"),
-//                                rs.getString("p.cpf"),
-//                                rs.getString("p.nome")
-//                        )
-//                )
-//        );
-//    }
-//
-//    @Override
-//    public Optional<Usuario> buscarPorId(Long id) {
-//        String sql = "SELECT * FROM utravel.usuario u JOIN utravel.pessoa p ON u.pessoa_id = p.id WHERE u.id = (?)";
-//        Optional<Usuario> usuario = Optional.of(getJdbcTemplate().query(sql, new Object[]{id},
-//                                                (rs, rowNum) -> new Usuario(
-//                                                        rs.getLong("u.id"),
-//                                                        rs.getString("u.email"),
-//                                                        rs.getString("u.senha"),
-//                                                        rs.getString("u.telefone"),
-//                                                        new Pessoa(
-//                                                                rs.getLong("p.id"),
-//                                                                rs.getString("p.cpf"),
-//                                                                rs.getString("nome")
-//                                                        )
-//                                                )).get(0));
-//        return usuario;
-//    }
-//
-//    @Override
-//    @Transactional(rollbackFor = Exception.class)
-//    public Usuario salvar(Usuario usuario) {
-//        usuario.setPessoa(pessoaRepository.salvar(usuario.getPessoa()));
-//        String sql = "INSERT INTO utravel.usuario (pessoa_id, telefone, email, senha) VALUES (?, ?, ?, ?)";
-//
-//        KeyHolder keyHolder = new GeneratedKeyHolder();
-//        jdbcTemplate.update(connection -> {
-//            PreparedStatement ps = connection.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS);
-//            ps.setLong(1, usuario.getPessoa().getId());
-//            ps.setString(2, usuario.getTelefone());
-//            ps.setString(3, usuario.getEmail());
-//            ps.setString(4, usuario.getSenha());
-//            return ps;
-//        }, keyHolder);
-//        usuario.setId(keyHolder.getKey().longValue());
-//        return usuario;
-//    }
-//
-//    @Override
-//    public Usuario atualizar(Usuario usuario) {
-//        jdbcTemplate.update("UPDATE utravel.usuario SET telefone = ?, email = ?, senha = ? WHERE id = ?", usuario.getTelefone(), usuario.getEmail(), usuario.getSenha(), usuario.getId());
-//        return null;
-//    }
-//
-//    public ResponseEntity deletar(Long id) {
-//        jdbcTemplate.update("DELETE FROM utravel.usuario WHERE id = ?", id);
-//        return null;
-//    }
+    @Override
+    public List<Usuario> findAll() {
+        String SQL = "SELECT * FROM utravel.usuario u JOIN utravel.pessoa p ON u.pessoa_id = p.id";
+        List<Usuario> usuarios = jdbcTemplateObject.query(SQL, new UsuarioMapper());
+
+        return usuarios;
+    }
+
+    @Override
+    public Optional<Usuario> findById(Integer id) {
+        String SQL = "SELECT * FROM utravel.usuario u JOIN utravel.pessoa p ON u.pessoa_id = p.id WHERE u.id = ?";
+        List<Usuario> usuarios = jdbcTemplateObject.query(SQL, new Object[]{ id }, new UsuarioMapper());
+
+        if (usuarios.isEmpty()){
+            return Optional.empty();
+        }
+
+        return Optional.of(usuarios.get(0));
+    }
+
+    @Override
+    @Transactional(rollbackFor = Exception.class)
+    public Usuario save(Usuario usuario) {
+        KeyHolder keyHolder = new GeneratedKeyHolder();
+        usuario.setPessoa(pessoaRepository.save(usuario.getPessoa()));
+
+        String SQL = "INSERT INTO utravel.usuario (pessoa_id, telefone, email, senha) VALUES (?, ?, ?, ?)";
+        jdbcTemplateObject.update(connection -> {
+            PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
+            preparedStatement.setInt(1, usuario.getPessoa().getId());
+            preparedStatement.setString(2, usuario.getTelefone());
+            preparedStatement.setString(3, usuario.getEmail());
+            preparedStatement.setString(4, usuario.getSenha());
+            return preparedStatement;
+        }, keyHolder);
+
+        if (keyHolder.getKey() != null){
+            usuario.setId(keyHolder.getKey().intValue());
+        }
+
+        return usuario;
+    }
+
+    @Override
+    public Usuario update(Usuario usuario) {
+        String SQL = "UPDATE utravel.usuario SET telefone = ?, email = ?, senha = ? WHERE id = ?";
+        jdbcTemplateObject.update(SQL, usuario.getTelefone(), usuario.getEmail(), usuario.getSenha(), usuario.getId());
+
+        return usuario;
+    }
+
+    @Override
+    public String delete(Integer id) {
+        String SQL = "DELETE FROM utravel.usuario WHERE id = ?";
+        jdbcTemplateObject.update(SQL, id);
+
+        return "Sucesso";
+    }
 }

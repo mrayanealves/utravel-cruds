@@ -2,6 +2,7 @@ package br.ufrn.imd.utravel.repository;
 
 import br.ufrn.imd.utravel.model.Pessoa;
 import br.ufrn.imd.utravel.repository.mapper.PessoaMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.PreparedStatementCreator;
@@ -19,6 +20,7 @@ import java.util.Optional;
 
 @Repository
 public class PessoaRepository implements GenericRepository<Pessoa>{
+    @Autowired
     private final JdbcTemplate jdbcTemplateObject;
 
     public PessoaRepository(DataSource dataSource) {
