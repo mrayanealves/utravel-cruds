@@ -13,6 +13,7 @@ import br.ufrn.imd.utravel.repository.PessoaRepository;
 
 @Service
 public class PessoaService {
+	@Autowired
 	private final PessoaRepository pessoaRepository;
 	
 	@Autowired
@@ -59,5 +60,9 @@ public class PessoaService {
 		}
 
 		return pessoaRepository.update(pessoa);
+	}
+
+	public String delete(Integer id){
+		return pessoaRepository.delete(id);
 	}
 }

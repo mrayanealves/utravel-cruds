@@ -75,7 +75,10 @@ public class PessoaRepository implements GenericRepository<Pessoa>{
     }
 
     @Override
-    public String delete(Long id) {
-        return null;
+    public String delete(Integer id) {
+        String SQL = "DELETE FROM utravel.pessoa WHERE id = ?";
+        jdbcTemplateObject.update(SQL, id);
+
+        return "Sucesso";
     }
 }

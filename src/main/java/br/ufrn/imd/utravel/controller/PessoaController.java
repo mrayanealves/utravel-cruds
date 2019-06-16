@@ -38,4 +38,9 @@ public class PessoaController {
 	public ResponseEntity<Pessoa> update(@PathVariable Integer id, @RequestBody Pessoa pessoa){
 		return ResponseEntity.ok(pessoaService.update(id, pessoa));
 	}
+
+	@DeleteMapping("/{id}")
+    public ResponseEntity<String> delete(@PathVariable Integer id){
+	    return ResponseEntity.ok(pessoaService.delete(id));
+    }
 }

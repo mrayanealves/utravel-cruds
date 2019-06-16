@@ -15,5 +15,5 @@ public interface GenericRepository <T extends AbstractModel> {
 
     T update(T modelo);
 
-    String delete(Long id);
+    String delete(Integer id);
 }
