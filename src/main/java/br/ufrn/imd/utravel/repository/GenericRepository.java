@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface GenericRepository <T extends AbstractModel> {
     List<T> findAll();
 
-    Optional<T> findById(Long id);
+    Optional<T> findById(Integer id);
 
     T save(T modelo);
 

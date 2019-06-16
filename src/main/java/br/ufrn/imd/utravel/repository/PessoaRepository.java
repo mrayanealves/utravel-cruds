@@ -2,6 +2,7 @@ package br.ufrn.imd.utravel.repository;
 
 import br.ufrn.imd.utravel.model.Pessoa;
 import br.ufrn.imd.utravel.repository.mapper.PessoaMapper;
+import org.springframework.jdbc.core.BeanPropertyRowMapper;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
@@ -31,8 +32,16 @@ public class PessoaRepository implements GenericRepository<Pessoa>{
     }
 
     @Override
-    public Optional<Pessoa> findById(Long id) {
-        return Optional.empty();
+    public Optional<Pessoa> findById(Integer id) {
+        String SQL = "SELECT * FROM utravel.pessoa WHERE id = ?";
+
+        List<Pessoa> pessoas = jdbcTemplateObject.query(SQL, new Object[] { id }, new PessoaMapper());
+
+        if (pessoas.isEmpty()){
+            return Optional.empty();
+        }
+
+        return Optional.of(pessoas.get(0));
     }
 
     @Override
