@@ -3,10 +3,10 @@ package br.ufrn.imd.utravel.service;
 import br.ufrn.imd.utravel.model.Empresa;
 import br.ufrn.imd.utravel.repository.EmpresaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class EmpresaService implements GenericService<Empresa> {
@@ -23,8 +23,8 @@ public class EmpresaService implements GenericService<Empresa> {
     }
 
     @Override
-    public ResponseEntity<Empresa> findById(Integer id) {
-        return ResponseEntity.ok(empresaRepository.findById(id).get());
+    public Optional<Empresa> findById(Integer id) {
+        return empresaRepository.findById(id);
     }
 
     @Override
