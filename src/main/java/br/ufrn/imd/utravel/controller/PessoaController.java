@@ -3,6 +3,8 @@ package br.ufrn.imd.utravel.controller;
 import io.swagger.annotations.Api;
 
 import java.util.List;
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,7 +26,13 @@ public class PessoaController implements GenericController<Pessoa>{
 
     @Override
 	public ResponseEntity<Pessoa> findById(@PathVariable Integer id){
-		return pessoaService.findById(id);
+		Optional<Pessoa> pessoa = pessoaService.findById(id);
+
+		if (!pessoa.isPresent()) {
+			return ResponseEntity.notFound().build();
+		}
+		
+    	return ResponseEntity.ok(pessoa.get());
 	}
 
     @Override

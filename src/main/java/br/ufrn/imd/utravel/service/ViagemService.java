@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class ViagemService implements GenericService<Viagem> {
@@ -23,8 +24,8 @@ public class ViagemService implements GenericService<Viagem> {
     }
 
     @Override
-    public ResponseEntity<Viagem> findById(Integer id) {
-        return ResponseEntity.ok(viagemRepository.findById(id).get());
+    public Optional<Viagem> findById(Integer id) {
+        return viagemRepository.findById(id);
     }
 
     @Override
