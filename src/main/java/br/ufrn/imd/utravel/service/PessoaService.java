@@ -12,7 +12,7 @@ import br.ufrn.imd.utravel.model.Pessoa;
 import br.ufrn.imd.utravel.repository.PessoaRepository;
 
 @Service
-public class PessoaService {
+public class PessoaService implements GenericService<Pessoa>{
 	@Autowired
 	private final PessoaRepository pessoaRepository;
 	
@@ -20,11 +20,13 @@ public class PessoaService {
 	private PessoaService(PessoaRepository pessoaRepository) {
 		this.pessoaRepository = pessoaRepository;
 	}
-	
+
+	@Override
 	public List<Pessoa> findAll(){
 		return pessoaRepository.findAll();
 	}
 
+	@Override
 	public ResponseEntity<Pessoa> findById(Integer id){
 		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
 
@@ -35,10 +37,12 @@ public class PessoaService {
 		return ResponseEntity.ok(pessoa.get());
 	}
 
+	@Override
 	public Pessoa save(Pessoa pessoa){
 		return pessoaRepository.save(pessoa);
 	}
 
+	@Override
 	public Pessoa update(Integer id, Pessoa pessoa){
 		Optional<Pessoa> pessoaFind = pessoaRepository.findById(id);
 		if (!pessoaFind.isPresent()){
@@ -62,6 +66,7 @@ public class PessoaService {
 		return pessoaRepository.update(pessoa);
 	}
 
+	@Override
 	public String delete(Integer id){
 		return pessoaRepository.delete(id);
 	}
