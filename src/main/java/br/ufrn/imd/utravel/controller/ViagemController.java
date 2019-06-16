@@ -36,7 +36,7 @@ public class ViagemController implements GenericController<Viagem> {
 
     @Override
     public ResponseEntity<Viagem> update(Integer id, Viagem viagem) {
-        return ResponseEntity.ok(viagemService.save(viagem));
+        return ResponseEntity.ok(viagemService.update(id, viagem));
     }
 
     @Override
