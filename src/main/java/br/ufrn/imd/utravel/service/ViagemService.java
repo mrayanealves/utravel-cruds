@@ -35,7 +35,7 @@ public class ViagemService implements GenericService<Viagem> {
     @Override
     public Viagem update(Integer id, Viagem viagem) {
         viagem.setId(id);
-        return viagemRepository.save(viagem);
+        return viagemRepository.update(viagem);
     }
 
     @Override
