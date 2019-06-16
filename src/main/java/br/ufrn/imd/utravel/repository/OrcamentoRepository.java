@@ -66,11 +66,17 @@ public class OrcamentoRepository implements GenericRepository<Orcamento> {
 
     @Override
     public Orcamento update(Orcamento orcamento) {
-        return null;
+        String SQL = "UPDATE utravel.orcamento SET tipo = ?, valor_estimado = ? WHERE id = ?";
+        jdbcTemplateObject.update(SQL, orcamento.getTipo(), orcamento.getValorEstimado(), orcamento.getId());
+
+        return orcamento;
     }
 
     @Override
     public String delete(Integer id) {
-        return null;
+        String SQL = "DELETE FROM utravel.orcamento WHERE id = ?";
+        jdbcTemplateObject.update(SQL, id);
+
+        return "Sucesso";
     }
 }
