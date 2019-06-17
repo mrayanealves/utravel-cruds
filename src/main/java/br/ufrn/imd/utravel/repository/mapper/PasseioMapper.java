@@ -14,6 +14,7 @@ public class PasseioMapper implements RowMapper<Passeio> {
         passeio.setTipo(resultSet.getString("p.tipo"));
         passeio.setEndereco(resultSet.getString("p.endereco"));
         passeio.setEmpresa(resultSet.getString("p.empresa"));
+        passeio.setLocalizacao(new LocalizacaoMapper().mapRow(resultSet, i));
         return passeio;
     }
 }

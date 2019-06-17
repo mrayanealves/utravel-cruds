@@ -4,8 +4,7 @@ public class Passeio extends AbstractModel {
     private String tipo;
     private String endereco;
     private String empresa;
-    // TODO: localizacao_id
-
+    private Localizacao localizacao;
 
     public String getTipo() {
         return tipo;
@@ -29,5 +28,13 @@ public class Passeio extends AbstractModel {
 
     public void setEmpresa(String empresa) {
         this.empresa = empresa;
+    }
+
+    public Localizacao getLocalizacao() {
+        return localizacao;
+    }
+
+    public void setLocalizacao(Localizacao localizacao) {
+        this.localizacao = localizacao;
     }
 }
