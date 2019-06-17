@@ -42,10 +42,20 @@ public class ViagemRepository implements GenericRepository<Viagem> {
         String sql = "SELECT * FROM utravel.viagem v";
         List<Viagem> viagens =  jdbcTemplateObject.query(sql, new ViagemMapper());
 
-        for (int i = 0; i < viagens.size(); i++){
-            viagens.get(i).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
-            viagens.get(i).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(0).getId()));
-            viagens.get(i).setViagemReservas(viagemReservaRepository.findByViagemId(viagens.get(0).getId()));
+        if (!viagens.isEmpty()){
+            for (int i = 0; i < viagens.size(); i++){
+                if (orcamentoRepository.findByViagemId(viagens.get(i).getId()) != null){
+                    viagens.get(i).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(i).getId()));
+                }
+
+                if (viagemDestinoRepository.findByViagemId(viagens.get(i).getId()) != null){
+                    viagens.get(i).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(i).getId()));
+                }
+
+                if (viagemReservaRepository.findByViagemId(viagens.get(i).getId()) != null){
+                    viagens.get(i).setViagemReservas(viagemReservaRepository.findByViagemId(viagens.get(i).getId()));
+                }
+            }
         }
 
         return viagens;
@@ -59,9 +69,17 @@ public class ViagemRepository implements GenericRepository<Viagem> {
             return Optional.empty();
         }
 
-        viagens.get(0).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
-        viagens.get(0).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(0).getId()));
-        viagens.get(0).setViagemReservas(viagemReservaRepository.findByViagemId(viagens.get(0).getId()));
+        if (orcamentoRepository.findByViagemId(viagens.get(0).getId()) != null){
+            viagens.get(0).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
+        }
+
+        if (viagemDestinoRepository.findByViagemId(viagens.get(0).getId()) != null){
+            viagens.get(0).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(0).getId()));
+        }
+
+        if (viagemReservaRepository.findByViagemId(viagens.get(0).getId()) != null){
+            viagens.get(0).setViagemReservas(viagemReservaRepository.findByViagemId(viagens.get(0).getId()));
+        }
         return Optional.of(viagens.get(0));
     }
 
