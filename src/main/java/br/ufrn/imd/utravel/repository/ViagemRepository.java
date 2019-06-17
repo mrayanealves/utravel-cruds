@@ -1,12 +1,14 @@
 package br.ufrn.imd.utravel.repository;
 
 import br.ufrn.imd.utravel.model.Viagem;
+import br.ufrn.imd.utravel.model.ViagemDestino;
 import br.ufrn.imd.utravel.repository.mapper.ViagemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
 import java.sql.Date;
@@ -20,15 +22,28 @@ public class ViagemRepository implements GenericRepository<Viagem> {
     @Autowired
     private final JdbcTemplate jdbcTemplateObject;
 
+    private final OrcamentoRepository orcamentoRepository;
+
+    private final ViagemDestinoRepository viagemDestinoRepository;
+
     @Autowired
-    public ViagemRepository(DataSource dataSource) {
+    public ViagemRepository(DataSource dataSource, OrcamentoRepository orcamentoRepository, ViagemDestinoRepository viagemDestinoRepository) {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
+        this.orcamentoRepository = orcamentoRepository;
+        this.viagemDestinoRepository = viagemDestinoRepository;
     }
 
     @Override
     public List<Viagem> findAll() {
         String sql = "SELECT * FROM utravel.viagem v";
-        return jdbcTemplateObject.query(sql, new ViagemMapper());
+        List<Viagem> viagens =  jdbcTemplateObject.query(sql, new ViagemMapper());
+
+        for (int i = 0; i < viagens.size(); i++){
+            viagens.get(i).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
+            viagens.get(i).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(0).getId()));
+        }
+
+        return viagens;
     }
 
     @Override
@@ -39,18 +54,21 @@ public class ViagemRepository implements GenericRepository<Viagem> {
             return Optional.empty();
         }
 
+        viagens.get(0).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
+        viagens.get(0).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(0).getId()));
         return Optional.of(viagens.get(0));
     }
 
     @Override
     public Viagem save(Viagem viagem) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String SQL = "INSERT INTO utravel.viagem (data_inicio, data_fim) VALUES (?, ?)";
+        String SQL = "INSERT INTO utravel.viagem (titulo, data_inicio, data_fim) VALUES (?, ?, ?)";
 
         jdbcTemplateObject.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
-            preparedStatement.setDate(1, Date.valueOf(viagem.getDataInicio()));
-            preparedStatement.setDate(2, Date.valueOf(viagem.getDataFim()));
+            preparedStatement.setString(1, viagem.getTitulo());
+            preparedStatement.setDate(2, Date.valueOf(viagem.getDataInicio()));
+            preparedStatement.setDate(3, Date.valueOf(viagem.getDataFim()));
             return preparedStatement;
         }, keyHolder);
 
@@ -63,8 +81,8 @@ public class ViagemRepository implements GenericRepository<Viagem> {
 
     @Override
     public Viagem update(Viagem viagem) {
-        String SQL = "UPDATE utravel.viagem SET data_inicio= ?, data_fim = ? WHERE id = ?";
-        jdbcTemplateObject.update(SQL, viagem.getDataInicio(), viagem.getDataFim(), viagem.getId());
+        String SQL = "UPDATE utravel.viagem SET titulo = ?, data_inicio= ?, data_fim = ? WHERE id = ?";
+        jdbcTemplateObject.update(SQL, viagem.getTitulo(), viagem.getDataInicio(), viagem.getDataFim(), viagem.getId());
         return viagem;
     }
 
@@ -73,5 +91,31 @@ public class ViagemRepository implements GenericRepository<Viagem> {
         String SQL = "DELETE FROM utravel.viagem WHERE id = ?";
         jdbcTemplateObject.update(SQL, id);
         return "Sucesso";
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Viagem adicionarDestino(ViagemDestino viagemDestino){
+        viagemDestinoRepository.save(viagemDestino);
+        Optional<Viagem> viagem = findById(viagemDestino.getViagem().getId());
+
+        if (!viagem.isPresent()){
+            return null;
+        }
+
+        return viagem.get();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Viagem removerDestino(Integer id){
+        Viagem viagemFind = viagemDestinoRepository.findById(id).getViagem();
+        viagemDestinoRepository.delete(id);
+
+        Optional<Viagem> viagem = findById(viagemFind.getId());
+
+        if (!viagem.isPresent()){
+            return null;
+        }
+
+        return viagem.get();
     }
 }
