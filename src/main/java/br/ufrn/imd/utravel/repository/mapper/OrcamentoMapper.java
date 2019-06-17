@@ -15,6 +15,7 @@ public class OrcamentoMapper implements RowMapper<Orcamento> {
         orcamento.setTipo(resultSet.getString("o.tipo"));
         orcamento.setValorEstimado(resultSet.getFloat("o.valor_estimado"));
         orcamento.setViagem(new Viagem(resultSet.getInt("v.id"),
+                                       resultSet.getString("v.titulo"),
                                        resultSet.getDate("v.data_inicio").toLocalDate(),
                                        resultSet.getDate("v.data_fim").toLocalDate()));
 

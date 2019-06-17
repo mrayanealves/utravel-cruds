@@ -11,6 +11,7 @@ public class ViagemMapper implements RowMapper<Viagem> {
     public Viagem mapRow(ResultSet resultSet, int i) throws SQLException {
         Viagem viagem = new Viagem();
         viagem.setId(resultSet.getInt("v.id"));
+        viagem.setTitulo(resultSet.getString("v.titulo"));
         viagem.setDataInicio(resultSet.getDate("v.data_inicio").toLocalDate());
         viagem.setDataFim(resultSet.getDate("v.data_fim").toLocalDate());
         return viagem;

@@ -14,8 +14,9 @@ public class ViagemDestinoMapper implements RowMapper<ViagemDestino> {
         ViagemDestino viagemDestino = new ViagemDestino();
         viagemDestino.setId(resultSet.getInt("vd.id"));
         viagemDestino.setViagem(new Viagem(resultSet.getInt("v.id"),
-                                           resultSet.getDate("v.data_inicio").toLocalDate(),
-                                           resultSet.getDate("v.data_fim").toLocalDate()));
+                        resultSet.getString("v.titulo"),
+                        resultSet.getDate("v.data_inicio").toLocalDate(),
+                        resultSet.getDate("v.data_fim").toLocalDate()));
         viagemDestino.setLocalizacao(new Localizacao(resultSet.getInt("l.id"),
                                                      resultSet.getString("l.pais"),
                                                      resultSet.getString("l.estado"),

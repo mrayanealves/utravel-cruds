@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Viagem extends AbstractModel {
+    private String titulo;
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private List<Orcamento> orcamentos;
@@ -12,10 +13,23 @@ public class Viagem extends AbstractModel {
     public Viagem() {
     }
 
-    public Viagem(Integer id, LocalDate dataInicio, LocalDate dataFim) {
+    public Viagem(Integer id, String titulo, LocalDate dataInicio, LocalDate dataFim) {
         super.setId(id);
+        this.titulo = titulo;
         this.dataInicio = dataInicio;
         this.dataFim = dataFim;
+    }
+
+    public Viagem(int anInt, LocalDate toLocalDate, LocalDate toLocalDate1) {
+        super();
+    }
+
+    public String getTitulo() {
+        return titulo;
+    }
+
+    public void setTitulo(String titulo) {
+        this.titulo = titulo;
     }
 
     public LocalDate getDataInicio() {

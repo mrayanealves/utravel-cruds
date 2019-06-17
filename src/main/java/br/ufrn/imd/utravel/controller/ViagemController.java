@@ -1,5 +1,6 @@
 package br.ufrn.imd.utravel.controller;
 
+import br.ufrn.imd.utravel.model.Orcamento;
 import br.ufrn.imd.utravel.model.Viagem;
 import br.ufrn.imd.utravel.model.ViagemDestino;
 import br.ufrn.imd.utravel.service.ViagemService;
@@ -56,8 +57,18 @@ public class ViagemController implements GenericController<Viagem> {
         return ResponseEntity.ok(viagemService.adicionarDestino(id, viagemDestino));
     }
 
-    @DeleteMapping("/deletarDestino")
-    public ResponseEntity<Viagem> deletarDestino(@RequestBody ViagemDestino viagemDestino){
-        return ResponseEntity.ok(viagemService.removerDestino(viagemDestino));
+    @DeleteMapping("/{id}/deletarDestino")
+    public ResponseEntity<Viagem> deletarDestino(@PathVariable Integer id, @RequestBody ViagemDestino viagemDestino){
+        return ResponseEntity.ok(viagemService.removerDestino(id, viagemDestino));
+    }
+
+    @PostMapping("/{id}/adicionarOrcamento")
+    public ResponseEntity<Viagem> adicionaOrcamento(@PathVariable Integer id, @RequestBody Orcamento orcamento){
+        return ResponseEntity.ok(viagemService.adicionarOrcamento(id, orcamento));
+    }
+
+    @DeleteMapping("/{id}/deletarOrcamento")
+    public ResponseEntity<Viagem> deletarOrcamento(@PathVariable Integer id, @RequestBody Orcamento orcamento){
+        return ResponseEntity.ok(viagemService.removerOrcamento(id, orcamento));
     }
 }
