@@ -13,7 +13,7 @@ public class PasseioMapper implements RowMapper<Passeio> {
         passeio.setId(resultSet.getInt("p.id"));
         passeio.setTipo(resultSet.getString("p.tipo"));
         passeio.setEndereco(resultSet.getString("p.endereco"));
-        passeio.setEmpresa(resultSet.getString("p.empresa"));
+        passeio.setEmpresa(new EmpresaMapper().mapRow(resultSet, i));
         passeio.setLocalizacao(new LocalizacaoMapper().mapRow(resultSet, i));
         return passeio;
     }
