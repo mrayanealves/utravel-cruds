@@ -1,5 +1,6 @@
 package br.ufrn.imd.utravel.repository;
 
+import br.ufrn.imd.utravel.model.Viagem;
 import br.ufrn.imd.utravel.model.ViagemDestino;
 import br.ufrn.imd.utravel.repository.mapper.ViagemDestinoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +19,18 @@ public class ViagemDestinoRepository {
     @Autowired
     public ViagemDestinoRepository(JdbcTemplate jdbcTemplateObject) {
         this.jdbcTemplateObject = jdbcTemplateObject;
+    }
+
+    public ViagemDestino findById(Integer id){
+        String SQL = "SELECT * FROM utravel.viagem_destino vd, utravel.viagem v, utravel.localizacao l " +
+                "WHERE vd.viagem_id = v.id AND vd.destino_id = l.id AND vd.id = ?";
+        List<ViagemDestino> viagemDestinos = jdbcTemplateObject.query(SQL, new Object[]{ id }, new ViagemDestinoMapper());
+
+        if (viagemDestinos.isEmpty()){
+            return null;
+        }
+
+        return viagemDestinos.get(0);
     }
 
     public void save(ViagemDestino viagemDestino){

@@ -101,4 +101,17 @@ public class ViagemRepository implements GenericRepository<Viagem> {
 
         return viagem.get();
     }
+
+    public Viagem removerDestino(Integer id){
+        Viagem viagemFind = viagemDestinoRepository.findById(id).getViagem();
+        viagemDestinoRepository.delete(id);
+
+        Optional<Viagem> viagem = findById(viagemFind.getId());
+
+        if (!viagem.isPresent()){
+            return null;
+        }
+
+        return viagem.get();
+    }
 }

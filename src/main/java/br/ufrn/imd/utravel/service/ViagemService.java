@@ -58,4 +58,8 @@ public class ViagemService implements GenericService<Viagem> {
 
         return viagemRepository.adicionarDestino(viagemDestino);
     }
+
+    public Viagem removerDestino(ViagemDestino viagemDestino){
+        return viagemRepository.removerDestino(viagemDestino.getId());
+    }
 }

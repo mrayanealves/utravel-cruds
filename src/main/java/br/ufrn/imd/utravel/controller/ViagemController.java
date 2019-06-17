@@ -55,4 +55,9 @@ public class ViagemController implements GenericController<Viagem> {
     public ResponseEntity<Viagem> adicionarDestino(@PathVariable Integer id, @RequestBody ViagemDestino viagemDestino){
         return ResponseEntity.ok(viagemService.adicionarDestino(id, viagemDestino));
     }
+
+    @DeleteMapping("/deletarDestino")
+    public ResponseEntity<Viagem> deletarDestino(@RequestBody ViagemDestino viagemDestino){
+        return ResponseEntity.ok(viagemService.removerDestino(viagemDestino));
+    }
 }
