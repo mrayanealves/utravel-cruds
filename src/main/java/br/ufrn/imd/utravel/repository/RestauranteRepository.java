@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.PreparedStatement;
 import java.sql.Statement;
@@ -17,9 +18,12 @@ import java.util.Optional;
 public class RestauranteRepository implements GenericRepository<Restaurante> {
     private final JdbcTemplate jdbcTemplate;
 
+    private final EmpresaRepository empresaRepository;
+
     @Autowired
-    public RestauranteRepository(JdbcTemplate jdbcTemplate) {
+    public RestauranteRepository(JdbcTemplate jdbcTemplate, EmpresaRepository empresaRepository) {
         this.jdbcTemplate = jdbcTemplate;
+        this.empresaRepository = empresaRepository;
     }
 
     @Override
@@ -40,15 +44,18 @@ public class RestauranteRepository implements GenericRepository<Restaurante> {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Restaurante save(Restaurante restaurante) {
         KeyHolder keyHolder = new GeneratedKeyHolder();
-        String SQL = "INSERT INTO utravel.restaurante (empresa_id, tipo, avaliacao) VALUES (?, ?, ?)";
+        restaurante.setEmpresa(empresaRepository.save(restaurante.getEmpresa()));
+        String SQL = "INSERT INTO utravel.restaurante (empresa_id, tipo, avaliacao, endereco) VALUES (?, ?, ?, ?)";
 
         jdbcTemplate.update(connection -> {
             PreparedStatement preparedStatement = connection.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS);
             preparedStatement.setInt(1, restaurante.getEmpresa().getId());
             preparedStatement.setString(2, restaurante.getTipo());
             preparedStatement.setString(3, restaurante.getAvaliacao());
+            preparedStatement.setString(4, restaurante.getEndereco());
             return preparedStatement;
         }, keyHolder);
 

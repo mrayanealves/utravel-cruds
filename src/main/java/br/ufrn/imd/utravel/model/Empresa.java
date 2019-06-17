@@ -4,6 +4,15 @@ public class Empresa extends AbstractModel {
     private String cnpj;
     private String nome;
 
+    public Empresa() {
+    }
+
+    public Empresa(Integer id, String cnpj, String nome) {
+        super.setId(id);
+        this.cnpj = cnpj;
+        this.nome = nome;
+    }
+
     public String getCnpj() {
         return cnpj;
     }

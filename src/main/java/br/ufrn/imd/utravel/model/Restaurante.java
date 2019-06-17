@@ -6,6 +6,17 @@ public class Restaurante extends AbstractModel {
     private String avaliacao;
     private String endereco;
 
+    public Restaurante() {
+    }
+
+    public Restaurante(Integer id, String tipo, String avaliacao, String endereco, Empresa empresa) {
+        super.setId(id);
+        this.tipo = tipo;
+        this.avaliacao = avaliacao;
+        this.endereco = endereco;
+        this.empresa = empresa;
+    }
+
     public Empresa getEmpresa() {
         return empresa;
     }

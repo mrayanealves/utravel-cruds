@@ -82,5 +82,4 @@ public class ViagemController implements GenericController<Viagem> {
     public ResponseEntity<Viagem> deletarEstadia(@PathVariable(value = "destino_id") Integer id, @RequestBody Estadia estadia){
         return ResponseEntity.ok(viagemService.removerEstadia(id, estadia));
     }
-
 }
