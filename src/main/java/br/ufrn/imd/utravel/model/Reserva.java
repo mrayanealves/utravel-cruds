@@ -1,8 +1,6 @@
 package br.ufrn.imd.utravel.model;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 
 public class Reserva extends AbstractModel {
     private Long numero;
