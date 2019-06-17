@@ -21,13 +21,13 @@ public class EstadiaMapper implements RowMapper<Estadia> {
         estadia.setValorPago(resultSet.getFloat("es.valor_pago"));
         estadia.setViagemDestino(new ViagemDestino(resultSet.getInt("vd.id"),
                                                    new Viagem(resultSet.getInt("v.id"),
-                                                   resultSet.getString("c.titulo"),
+                                                   resultSet.getString("v.titulo"),
                                                    resultSet.getDate("v.data_inicio").toLocalDate(),
                                                    resultSet.getDate("v.data_fim").toLocalDate()),
                                                    new Localizacao(resultSet.getInt("l.id"),
-                                                   resultSet.getString(resultSet.getString("l.pais")),
-                                                   resultSet.getString(resultSet.getString("l.estado")),
-                                                   resultSet.getString(resultSet.getString("l.cidade")))));
+                                                   resultSet.getString("l.pais"),
+                                                   resultSet.getString("l.estado"),
+                                                   resultSet.getString("l.cidade"))));
         return estadia;
     }
 }

@@ -1,6 +1,5 @@
 package br.ufrn.imd.utravel.repository;
 
-import br.ufrn.imd.utravel.model.Viagem;
 import br.ufrn.imd.utravel.model.ViagemDestino;
 import br.ufrn.imd.utravel.repository.mapper.ViagemDestinoMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,9 +15,12 @@ public class ViagemDestinoRepository {
     @Autowired
     private final JdbcTemplate jdbcTemplateObject;
 
+    private final EstadiaRepository estadiaRepository;
+
     @Autowired
-    public ViagemDestinoRepository(JdbcTemplate jdbcTemplateObject) {
+    public ViagemDestinoRepository(JdbcTemplate jdbcTemplateObject, EstadiaRepository estadiaRepository) {
         this.jdbcTemplateObject = jdbcTemplateObject;
+        this.estadiaRepository = estadiaRepository;
     }
 
     public ViagemDestino findById(Integer id){
@@ -29,6 +31,8 @@ public class ViagemDestinoRepository {
         if (viagemDestinos.isEmpty()){
             return null;
         }
+
+        viagemDestinos.get(0).setEstadias(estadiaRepository.findByViagemDestinoId(viagemDestinos.get(0).getId()));
 
         return viagemDestinos.get(0);
     }
@@ -54,6 +58,8 @@ public class ViagemDestinoRepository {
         String SQL = "SELECT * FROM utravel.viagem_destino vd, utravel.viagem v, utravel.localizacao l " +
                         "WHERE vd.viagem_id = v.id AND vd.destino_id = l.id AND v.id = ?";
         List<ViagemDestino> viagemDestinos = jdbcTemplateObject.query(SQL, new Object[]{ viagemId }, new ViagemDestinoMapper());
+
+        viagemDestinos.get(0).setEstadias(estadiaRepository.findByViagemDestinoId(viagemDestinos.get(0).getId()));
 
         return viagemDestinos;
     }

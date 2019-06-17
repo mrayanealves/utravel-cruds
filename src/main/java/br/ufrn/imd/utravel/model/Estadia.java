@@ -1,5 +1,7 @@
 package br.ufrn.imd.utravel.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class Estadia extends AbstractModel {
     private String codigo;
     private String endereco;
@@ -60,6 +62,7 @@ public class Estadia extends AbstractModel {
         this.valorPago = valorPago;
     }
 
+    @JsonIgnore
     public ViagemDestino getViagemDestino() {
         return viagemDestino;
     }

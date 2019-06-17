@@ -35,8 +35,8 @@ public class EstadiaRepository implements GenericRepository<Estadia> {
     @Override
     public Optional<Estadia> findById(Integer id) {
         String SQL = "SELECT * FROM utravel.estadia es, utravel.viagem_destino vd, utravel.viagem v, utravel.localizacao l " +
-                "WHERE es.viagem_destino_id = vd.id AND vd.viagem_id = v.id AND vd.destino_id = l.id";
-        List<Estadia> estadias = jdbcTemplateObject.query(SQL, new EstadiaMapper());
+                "WHERE es.viagem_destino_id = vd.id AND vd.viagem_id = v.id AND vd.destino_id = l.id AND es.id = ?";
+        List<Estadia> estadias = jdbcTemplateObject.query(SQL, new Object[]{id}, new EstadiaMapper());
 
         if (estadias.isEmpty()){
             return Optional.empty();
@@ -82,5 +82,13 @@ public class EstadiaRepository implements GenericRepository<Estadia> {
         jdbcTemplateObject.update(SQL, id);
 
         return "Sucesso";
+    }
+
+    public List<Estadia> findByViagemDestinoId(Integer viagemDestinoId){
+        String SQL = "SELECT * FROM utravel.estadia es, utravel.viagem_destino vd, utravel.viagem v, utravel.localizacao l " +
+                "WHERE es.viagem_destino_id = vd.id AND vd.viagem_id = v.id AND vd.destino_id = l.id AND es.viagem_destino_id = ?";
+        List<Estadia> estadias = jdbcTemplateObject.query(SQL, new Object[]{viagemDestinoId}, new EstadiaMapper());
+
+        return estadias;
     }
 }
