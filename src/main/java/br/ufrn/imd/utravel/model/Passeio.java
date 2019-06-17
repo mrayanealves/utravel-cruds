@@ -1,10 +1,18 @@
 package br.ufrn.imd.utravel.model;
 
 public class Passeio extends AbstractModel {
+    private Empresa empresa;
     private String tipo;
     private String endereco;
-    private String empresa;
     private Localizacao localizacao;
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
 
     public String getTipo() {
         return tipo;
@@ -20,14 +28,6 @@ public class Passeio extends AbstractModel {
 
     public void setEndereco(String endereco) {
         this.endereco = endereco;
-    }
-
-    public String getEmpresa() {
-        return empresa;
-    }
-
-    public void setEmpresa(String empresa) {
-        this.empresa = empresa;
     }
 
     public Localizacao getLocalizacao() {
