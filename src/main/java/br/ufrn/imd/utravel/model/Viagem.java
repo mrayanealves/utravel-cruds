@@ -7,6 +7,7 @@ public class Viagem extends AbstractModel {
     private LocalDate dataInicio;
     private LocalDate dataFim;
     private List<Orcamento> orcamentos;
+    private List<ViagemDestino> viagemDestinos;
 
     public Viagem() {
     }
@@ -39,5 +40,13 @@ public class Viagem extends AbstractModel {
 
     public void setOrcamentos(List<Orcamento> orcamentos) {
         this.orcamentos = orcamentos;
+    }
+
+    public List<ViagemDestino> getViagemDestinos() {
+        return viagemDestinos;
+    }
+
+    public void setViagemDestinos(List<ViagemDestino> viagemDestinos) {
+        this.viagemDestinos = viagemDestinos;
     }
 }

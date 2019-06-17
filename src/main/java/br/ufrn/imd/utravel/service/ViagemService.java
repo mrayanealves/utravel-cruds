@@ -1,6 +1,8 @@
 package br.ufrn.imd.utravel.service;
 
+import br.ufrn.imd.utravel.exception.EntidadeNaoEncontradaException;
 import br.ufrn.imd.utravel.model.Viagem;
+import br.ufrn.imd.utravel.model.ViagemDestino;
 import br.ufrn.imd.utravel.repository.ViagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -43,5 +45,17 @@ public class ViagemService implements GenericService<Viagem> {
     public String delete(Integer id) {
         viagemRepository.delete(id);
         return "Sucesso";
+    }
+
+    public Viagem adicionarDestino(Integer id, ViagemDestino viagemDestino){
+        Optional<Viagem> viagemFind = viagemRepository.findById(id);
+
+        if (!viagemFind.isPresent()){
+            throw new EntidadeNaoEncontradaException("Não foi possível encontrar uma viagem com este id.");
+        }
+
+        viagemDestino.setViagem(viagemFind.get());
+
+        return viagemRepository.adicionarDestino(viagemDestino);
     }
 }

@@ -1,11 +1,11 @@
 package br.ufrn.imd.utravel.controller;
 
 import br.ufrn.imd.utravel.model.Viagem;
+import br.ufrn.imd.utravel.model.ViagemDestino;
 import br.ufrn.imd.utravel.service.ViagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,5 +49,10 @@ public class ViagemController implements GenericController<Viagem> {
     @Override
     public ResponseEntity<String> delete(Integer id) {
         return ResponseEntity.ok(viagemService.delete(id));
+    }
+
+    @PostMapping("/{id}/adicionarDestino")
+    public ResponseEntity<Viagem> adicionarDestino(@PathVariable Integer id, @RequestBody ViagemDestino viagemDestino){
+        return ResponseEntity.ok(viagemService.adicionarDestino(id, viagemDestino));
     }
 }
