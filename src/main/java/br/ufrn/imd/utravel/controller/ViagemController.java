@@ -1,9 +1,6 @@
 package br.ufrn.imd.utravel.controller;
 
-import br.ufrn.imd.utravel.model.Estadia;
-import br.ufrn.imd.utravel.model.Orcamento;
-import br.ufrn.imd.utravel.model.Viagem;
-import br.ufrn.imd.utravel.model.ViagemDestino;
+import br.ufrn.imd.utravel.model.*;
 import br.ufrn.imd.utravel.service.ViagemService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -81,5 +78,15 @@ public class ViagemController implements GenericController<Viagem> {
     @DeleteMapping("/{destino_id}/deletar-estadia")
     public ResponseEntity<Viagem> deletarEstadia(@PathVariable(value = "destino_id") Integer id, @RequestBody Estadia estadia){
         return ResponseEntity.ok(viagemService.removerEstadia(id, estadia));
+    }
+
+    @PostMapping("/{id}/adicionar-reserva")
+    public ResponseEntity<Viagem> adicionarReserva(@PathVariable Integer id, @RequestBody ViagemReserva viagemReserva){
+        return ResponseEntity.ok(viagemService.adicionarReserva(id, viagemReserva));
+    }
+
+    @DeleteMapping("/{id}/deletar-reserva")
+    public ResponseEntity<Viagem> deletarReserva(@PathVariable Integer id, @RequestBody ViagemReserva viagemReserva){
+        return ResponseEntity.ok(viagemService.removerReserva(id, viagemReserva));
     }
 }

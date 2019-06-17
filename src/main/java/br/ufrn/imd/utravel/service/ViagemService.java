@@ -1,10 +1,7 @@
 package br.ufrn.imd.utravel.service;
 
 import br.ufrn.imd.utravel.exception.EntidadeNaoEncontradaException;
-import br.ufrn.imd.utravel.model.Estadia;
-import br.ufrn.imd.utravel.model.Orcamento;
-import br.ufrn.imd.utravel.model.Viagem;
-import br.ufrn.imd.utravel.model.ViagemDestino;
+import br.ufrn.imd.utravel.model.*;
 import br.ufrn.imd.utravel.repository.ViagemRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,12 +19,15 @@ public class ViagemService implements GenericService<Viagem> {
 
     private final EstadiaService estadiaService;
 
+    private final ReservaService reservaService;
+
     @Autowired
-    public ViagemService(ViagemRepository viagemRepository, OrcamentoService orcamentoService, LocalizacaoService localizacaoService, EstadiaService estadiaService) {
+    public ViagemService(ViagemRepository viagemRepository, OrcamentoService orcamentoService, LocalizacaoService localizacaoService, EstadiaService estadiaService, ReservaService reservaService) {
         this.viagemRepository = viagemRepository;
         this.orcamentoService = orcamentoService;
         this.localizacaoService = localizacaoService;
         this.estadiaService = estadiaService;
+        this.reservaService = reservaService;
     }
 
     @Override
@@ -71,6 +71,41 @@ public class ViagemService implements GenericService<Viagem> {
         viagemDestino.setViagem(viagemFind.get());
 
         return viagemRepository.adicionarDestino(viagemDestino);
+    }
+
+    public Viagem adicionarReserva(Integer id, ViagemReserva viagemReserva){
+        Optional<Viagem> viagemFind = viagemRepository.findById(id);
+
+        if (!viagemFind.isPresent()){
+            throw new EntidadeNaoEncontradaException("Não foi possível encontrar uma viagem com este id.");
+        }
+
+        if (viagemReserva.getReserva().getId() == null){
+            viagemReserva.setReserva(reservaService.save(viagemReserva.getReserva()));
+        }
+
+        viagemReserva.setViagem(viagemFind.get());
+
+        return viagemRepository.adicionarReserva(viagemReserva);
+    }
+
+    public Viagem removerReserva(Integer id, ViagemReserva viagemReserva){
+        Optional<Viagem> viagemFind = findById(id);
+
+        if (!viagemFind.isPresent()){
+            throw new EntidadeNaoEncontradaException("Não foi possível encontrar uma viagem com este id.");
+        }
+
+        Optional<Reserva> reservaFind = reservaService.findById(id);
+
+        if (!reservaFind.isPresent()){
+            throw new EntidadeNaoEncontradaException("Não foi possível encontrar uma reserva com este id.");
+        }
+
+        viagemReserva.setViagem(viagemFind.get());
+        viagemReserva.setReserva(reservaFind.get());
+
+        return viagemRepository.removerReserva(viagemReserva.getViagem().getId(), viagemReserva.getReserva().getId());
     }
 
     public Viagem removerDestino(Integer id, ViagemDestino viagemDestino){

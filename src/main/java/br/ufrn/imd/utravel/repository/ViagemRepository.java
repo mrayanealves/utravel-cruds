@@ -2,6 +2,7 @@ package br.ufrn.imd.utravel.repository;
 
 import br.ufrn.imd.utravel.model.Viagem;
 import br.ufrn.imd.utravel.model.ViagemDestino;
+import br.ufrn.imd.utravel.model.ViagemReserva;
 import br.ufrn.imd.utravel.repository.mapper.ViagemMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
@@ -26,11 +27,14 @@ public class ViagemRepository implements GenericRepository<Viagem> {
 
     private final ViagemDestinoRepository viagemDestinoRepository;
 
+    private final ViagemReservaRepository viagemReservaRepository;
+
     @Autowired
-    public ViagemRepository(DataSource dataSource, OrcamentoRepository orcamentoRepository, ViagemDestinoRepository viagemDestinoRepository) {
+    public ViagemRepository(DataSource dataSource, OrcamentoRepository orcamentoRepository, ViagemDestinoRepository viagemDestinoRepository, ViagemReservaRepository viagemReservaRepository) {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
         this.orcamentoRepository = orcamentoRepository;
         this.viagemDestinoRepository = viagemDestinoRepository;
+        this.viagemReservaRepository = viagemReservaRepository;
     }
 
     @Override
@@ -41,6 +45,7 @@ public class ViagemRepository implements GenericRepository<Viagem> {
         for (int i = 0; i < viagens.size(); i++){
             viagens.get(i).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
             viagens.get(i).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(0).getId()));
+            viagens.get(i).setViagemReservas(viagemReservaRepository.findByViagemId(viagens.get(0).getId()));
         }
 
         return viagens;
@@ -56,6 +61,7 @@ public class ViagemRepository implements GenericRepository<Viagem> {
 
         viagens.get(0).setOrcamentos(orcamentoRepository.findByViagemId(viagens.get(0).getId()));
         viagens.get(0).setViagemDestinos(viagemDestinoRepository.findByViagemId(viagens.get(0).getId()));
+        viagens.get(0).setViagemReservas(viagemReservaRepository.findByViagemId(viagens.get(0).getId()));
         return Optional.of(viagens.get(0));
     }
 
@@ -126,5 +132,31 @@ public class ViagemRepository implements GenericRepository<Viagem> {
             return Optional.empty();
         }
         return Optional.of(viagemDestino);
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Viagem adicionarReserva(ViagemReserva viagemReserva){
+        viagemReservaRepository.save(viagemReserva);
+        Optional<Viagem> viagem = findById(viagemReserva.getViagem().getId());
+
+        if (!viagem.isPresent()){
+            return null;
+        }
+
+        return viagem.get();
+    }
+
+    @Transactional(rollbackFor = Exception.class)
+    public Viagem removerReserva(Integer viagemId, Integer reservaId){
+        Viagem viagemFind = viagemDestinoRepository.findById(viagemId).getViagem();
+        viagemReservaRepository.delete(viagemId, reservaId);
+
+        Optional<Viagem> viagem = findById(viagemFind.getId());
+
+        if (!viagem.isPresent()){
+            return null;
+        }
+
+        return viagem.get();
     }
 }

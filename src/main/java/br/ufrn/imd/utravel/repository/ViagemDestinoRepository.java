@@ -59,7 +59,7 @@ public class ViagemDestinoRepository {
                         "WHERE vd.viagem_id = v.id AND vd.destino_id = l.id AND v.id = ?";
         List<ViagemDestino> viagemDestinos = jdbcTemplateObject.query(SQL, new Object[]{ viagemId }, new ViagemDestinoMapper());
 
-        viagemDestinos.get(0).setEstadias(estadiaRepository.findByViagemDestinoId(viagemDestinos.get(0).getId()));
+        // viagemDestinos.get(0).setEstadias(estadiaRepository.findByViagemDestinoId(viagemDestinos.get(0).getId()));
 
         return viagemDestinos;
     }

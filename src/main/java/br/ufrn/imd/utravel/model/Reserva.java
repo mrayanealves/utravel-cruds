@@ -12,7 +12,8 @@ public class Reserva extends AbstractModel {
     }
 
 
-    public Reserva(Long numero, LocalDate data, String mesa, Restaurante restaurante) {
+    public Reserva(Integer id, Long numero, LocalDate data, String mesa, Restaurante restaurante) {
+        super.setId(id);
         this.numero = numero;
         this.data = data;
         this.mesa = mesa;
