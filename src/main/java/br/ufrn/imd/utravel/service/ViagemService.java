@@ -1,6 +1,7 @@
 package br.ufrn.imd.utravel.service;
 
 import br.ufrn.imd.utravel.exception.EntidadeNaoEncontradaException;
+import br.ufrn.imd.utravel.model.Estadia;
 import br.ufrn.imd.utravel.model.Orcamento;
 import br.ufrn.imd.utravel.model.Viagem;
 import br.ufrn.imd.utravel.model.ViagemDestino;
@@ -19,11 +20,14 @@ public class ViagemService implements GenericService<Viagem> {
 
     private final LocalizacaoService localizacaoService;
 
+    private final EstadiaService estadiaService;
+
     @Autowired
-    public ViagemService(ViagemRepository viagemRepository, OrcamentoService orcamentoService, LocalizacaoService localizacaoService) {
+    public ViagemService(ViagemRepository viagemRepository, OrcamentoService orcamentoService, LocalizacaoService localizacaoService, EstadiaService estadiaService) {
         this.viagemRepository = viagemRepository;
         this.orcamentoService = orcamentoService;
         this.localizacaoService = localizacaoService;
+        this.estadiaService = estadiaService;
     }
 
     @Override
@@ -122,5 +126,42 @@ public class ViagemService implements GenericService<Viagem> {
         }
 
         return viagemFind.get();
+    }
+
+    public Viagem adicionarEstadia(Integer destinoId, Estadia estadia){
+        Optional<ViagemDestino> viagemDestinoFind = viagemRepository.buscarDestinoPorId(destinoId);
+
+        if (!viagemDestinoFind.isPresent()){
+            throw new EntidadeNaoEncontradaException("Não foi possível encontrar um destino com este id.");
+        }
+
+        estadia.setViagemDestino(viagemDestinoFind.get());
+        estadiaService.save(estadia);
+
+        Optional<Viagem> viagem = viagemRepository.findById(viagemDestinoFind.get().getViagem().getId());
+
+        if (!viagem.isPresent()){
+            throw new EntidadeNaoEncontradaException("Erro ao encontrar uma viagem com este id.");
+        }
+
+        return viagem.get();
+    }
+
+    public Viagem removerEstadia(Integer destinoId, Estadia estadia){
+        Optional<ViagemDestino> viagemDestinoFind = viagemRepository.buscarDestinoPorId(destinoId);
+
+        if (!viagemDestinoFind.isPresent()){
+            throw new EntidadeNaoEncontradaException("Não foi possível encontrar um destino com este id.");
+        }
+
+        estadiaService.delete(estadia.getId());
+
+        Optional<Viagem> viagem = viagemRepository.findById(viagemDestinoFind.get().getViagem().getId());
+
+        if (!viagem.isPresent()){
+            throw new EntidadeNaoEncontradaException("Erro ao encontrar uma viagem com este id.");
+        }
+
+        return viagem.get();
     }
 }

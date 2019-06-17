@@ -1,5 +1,6 @@
 package br.ufrn.imd.utravel.controller;
 
+import br.ufrn.imd.utravel.model.Estadia;
 import br.ufrn.imd.utravel.model.Orcamento;
 import br.ufrn.imd.utravel.model.Viagem;
 import br.ufrn.imd.utravel.model.ViagemDestino;
@@ -52,23 +53,34 @@ public class ViagemController implements GenericController<Viagem> {
         return ResponseEntity.ok(viagemService.delete(id));
     }
 
-    @PostMapping("/{id}/adicionarDestino")
+    @PostMapping("/{id}/adicionar-destino")
     public ResponseEntity<Viagem> adicionarDestino(@PathVariable Integer id, @RequestBody ViagemDestino viagemDestino){
         return ResponseEntity.ok(viagemService.adicionarDestino(id, viagemDestino));
     }
 
-    @DeleteMapping("/{id}/deletarDestino")
+    @DeleteMapping("/{id}/deletar-destino")
     public ResponseEntity<Viagem> deletarDestino(@PathVariable Integer id, @RequestBody ViagemDestino viagemDestino){
         return ResponseEntity.ok(viagemService.removerDestino(id, viagemDestino));
     }
 
-    @PostMapping("/{id}/adicionarOrcamento")
+    @PostMapping("/{id}/adicionar-orcamento")
     public ResponseEntity<Viagem> adicionaOrcamento(@PathVariable Integer id, @RequestBody Orcamento orcamento){
         return ResponseEntity.ok(viagemService.adicionarOrcamento(id, orcamento));
     }
 
-    @DeleteMapping("/{id}/deletarOrcamento")
+    @DeleteMapping("/{id}/deletar-orcamento")
     public ResponseEntity<Viagem> deletarOrcamento(@PathVariable Integer id, @RequestBody Orcamento orcamento){
         return ResponseEntity.ok(viagemService.removerOrcamento(id, orcamento));
     }
+
+    @PostMapping("/{destino_id}/adicionar-estadia")
+    public ResponseEntity<Viagem> adicionarEstadia(@PathVariable(value = "destino_id") Integer destinoId, @RequestBody Estadia estadia){
+        return ResponseEntity.ok(viagemService.adicionarEstadia(destinoId, estadia));
+    }
+
+    @DeleteMapping("/{destino_id}/deletar-estadia")
+    public ResponseEntity<Viagem> deletarEstadia(@PathVariable(value = "destino_id") Integer id, @RequestBody Estadia estadia){
+        return ResponseEntity.ok(viagemService.removerEstadia(id, estadia));
+    }
+
 }

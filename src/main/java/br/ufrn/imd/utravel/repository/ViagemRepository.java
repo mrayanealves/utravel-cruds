@@ -118,4 +118,13 @@ public class ViagemRepository implements GenericRepository<Viagem> {
 
         return viagem.get();
     }
+
+    public Optional<ViagemDestino> buscarDestinoPorId(Integer id){
+        ViagemDestino viagemDestino = viagemDestinoRepository.findById(id);
+
+        if (viagemDestino == null){
+            return Optional.empty();
+        }
+        return Optional.of(viagemDestino);
+    }
 }
