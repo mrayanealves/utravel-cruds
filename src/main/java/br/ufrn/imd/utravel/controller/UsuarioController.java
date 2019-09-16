@@ -8,12 +8,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("usuarios")
 @Api(value = "Gerenciar usuários")
 public class UsuarioController implements GenericController<Usuario> {
-    @Autowired
     private final UsuarioService usuarioService;
 
     @Autowired
@@ -28,7 +28,13 @@ public class UsuarioController implements GenericController<Usuario> {
 
     @Override
     public ResponseEntity<Usuario> findById(Integer id) {
-        return usuarioService.findById(id);
+        Optional<Usuario> usuario = usuarioService.findById(id);
+
+        if (!usuario.isPresent()){
+            return ResponseEntity.notFound().build();
+        }
+
+        return ResponseEntity.ok(usuario.get());
     }
 
     @Override

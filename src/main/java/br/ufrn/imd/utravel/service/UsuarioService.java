@@ -13,12 +13,11 @@ import java.util.Optional;
 
 @Service
 public class UsuarioService implements GenericService<Usuario>{
-    @Autowired
     private final UsuarioRepository usuarioRepository;
 
-    @Autowired
     private final PessoaService pessoaService;
 
+    @Autowired
     public UsuarioService(UsuarioRepository usuarioRepository, PessoaService pessoaService) {
         this.usuarioRepository = usuarioRepository;
         this.pessoaService = pessoaService;
@@ -30,14 +29,8 @@ public class UsuarioService implements GenericService<Usuario>{
     }
 
     @Override
-    public ResponseEntity<Usuario> findById(Integer id) {
-        Optional<Usuario> usuario = usuarioRepository.findById(id);
-
-        if (!usuario.isPresent()){
-            return ResponseEntity.notFound().build();
-        }
-
-        return ResponseEntity.ok(usuario.get());
+    public Optional<Usuario> findById(Integer id) {
+        return usuarioRepository.findById(id);
     }
 
     @Override

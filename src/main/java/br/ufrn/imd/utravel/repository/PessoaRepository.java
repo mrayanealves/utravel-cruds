@@ -20,9 +20,9 @@ import java.util.Optional;
 
 @Repository
 public class PessoaRepository implements GenericRepository<Pessoa>{
-    @Autowired
     private final JdbcTemplate jdbcTemplateObject;
 
+    @Autowired
     public PessoaRepository(DataSource dataSource) {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
     }

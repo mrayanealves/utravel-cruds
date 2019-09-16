@@ -5,7 +5,6 @@ import java.util.Optional;
 
 import br.ufrn.imd.utravel.exception.EntidadeNaoEncontradaException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import br.ufrn.imd.utravel.model.Pessoa;
@@ -13,7 +12,6 @@ import br.ufrn.imd.utravel.repository.PessoaRepository;
 
 @Service
 public class PessoaService implements GenericService<Pessoa>{
-	@Autowired
 	private final PessoaRepository pessoaRepository;
 	
 	@Autowired
@@ -27,14 +25,8 @@ public class PessoaService implements GenericService<Pessoa>{
 	}
 
 	@Override
-	public ResponseEntity<Pessoa> findById(Integer id){
-		Optional<Pessoa> pessoa = pessoaRepository.findById(id);
-
-		if (!pessoa.isPresent()){
-			return ResponseEntity.notFound().build();
-		}
-
-		return ResponseEntity.ok(pessoa.get());
+	public Optional<Pessoa> findById(Integer id) {
+		return pessoaRepository.findById(id);
 	}
 
 	@Override

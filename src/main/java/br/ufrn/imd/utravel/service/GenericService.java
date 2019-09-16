@@ -1,14 +1,14 @@
 package br.ufrn.imd.utravel.service;
 
 import br.ufrn.imd.utravel.model.AbstractModel;
-import org.springframework.http.ResponseEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface GenericService <T extends AbstractModel> {
     List<T> findAll();
 
-    ResponseEntity<T> findById(Integer id);
+    Optional<T> findById(Integer id);
 
     T save(T modelo);
 

@@ -17,12 +17,11 @@ import java.util.Optional;
 
 @Repository
 public class UsuarioRepository implements GenericRepository<Usuario>{
-    @Autowired
     private final JdbcTemplate jdbcTemplateObject;
 
-    @Autowired
     private final PessoaRepository pessoaRepository;
 
+    @Autowired
     public UsuarioRepository(DataSource dataSource, PessoaRepository pessoaRepository) {
         this.jdbcTemplateObject = new JdbcTemplate(dataSource);
         this.pessoaRepository = pessoaRepository;

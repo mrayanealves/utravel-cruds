@@ -1,6 +1,6 @@
 package br.ufrn.imd.utravel.exception;
 
-public class EntidadeNaoEncontradaException extends javax.persistence.EntityNotFoundException {
+public class EntidadeNaoEncontradaException extends RuntimeException {
     public EntidadeNaoEncontradaException() {
     }
 
